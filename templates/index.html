@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard de Detección y Conteo de Vehículos</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* Estilos Formales y de Tráfico */
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f4f7f6; /* Fondo claro y formal */
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+        .header {
+            background-color: #2c3e50; /* Azul oscuro - Formal/corporativo */
+            color: white;
+            padding: 20px 40px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .header h1 {
+            margin: 0;
+            font-weight: 700;
+        }
+        .container {
+            display: flex;
+            padding: 40px;
+            gap: 30px;
+        }
+        .video-panel {
+            flex-grow: 1;
+            background-color: #fff;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        .video-panel h2 {
+            background-color: #34495e; /* Azul más claro */
+            color: white;
+            padding: 15px;
+            margin: 0;
+            font-size: 1.2em;
+        }
+        .video-panel img {
+            width: 100%;
+            display: block;
+        }
+        .metrics-panel {
+            width: 300px; /* Ancho fijo para métricas */
+            background-color: #fff;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .metric-card {
+            border: 1px solid #ddd;
+            padding: 15px;
+            border-radius: 4px;
+            transition: box-shadow 0.3s;
+        }
+        .metric-card:hover {
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+        .metric-card strong {
+            display: block;
+            font-size: 1.5em;
+            color: #e67e22; /* Color de acento (Ámbar) */
+            margin-bottom: 5px;
+        }
+        .status-badge {
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: bold;
+            display: inline-block;
+        }
+        .status-detecting {
+            background-color: #2ecc71; /* Verde */
+            color: white;
+        }
+        .status-no-detection {
+            background-color: #e74c3c; /* Rojo */
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Sistema de Monitoreo de Tráfico - YOLO Dashboard</h1>
+        <p>Análisis en Tiempo Real</p>
+    </div>
+
+    <div class="container">
+        <div class="video-panel">
+            <h2>Transmisión en Vivo con Detecciones</h2>
+            <img src="{{ url_for('video_feed') }}" id="videoStream" alt="Feed de Video en Vivo">
+        </div>
+
+        <div class="metrics-panel">
+            <h2>Métricas Clave</h2>
+            
+            <div class="metric-card">
+                <p>Estado del Análisis:</p>
+                <span id="analysisStatus" class="status-badge status-detecting">Cargando...</span>
+            </div>
+            
+            <div id="objectCounts">
+                <h3>Conteo por Clase (Vehículos):</h3>
+                <p id="initial-load">Esperando detecciones...</p>
+                </div>
+            
+            <div class="metric-card">
+                Total de Objetos en Frame:
+                <strong id="totalObjects">0</strong>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Función para actualizar las métricas usando AJAX
+        function updateMetrics() {
+            fetch('/metrics')
+                .then(response => response.json())
+                .then(data => {
+                    const statusElement = document.getElementById('analysisStatus');
+                    const countsContainer = document.getElementById('objectCounts');
+                    const totalObjectsElement = document.getElementById('totalObjects');
+                    
+                    // 1. Actualizar el Estado
+                    statusElement.textContent = data.status;
+                    statusElement.className = 'status-badge ' + 
+                        (data.status === 'Detectando' ? 'status-detecting' : 'status-no-detection');
+
+                    // 2. Actualizar el Conteo por Clase
+                    let countsHtml = '<h3>Conteo por Clase (Vehículos):</h3>';
+                    let total = 0;
+                    
+                    if (Object.keys(data.counts).length > 0) {
+                        document.getElementById('initial-load').style.display = 'none';
+                        for (const [cls, num] of Object.entries(data.counts)) {
+                            countsHtml += `
+                                <div class="metric-card">
+                                    ${cls}:
+                                    <strong>${num}</strong>
+                                </div>
+                            `;
+                            total += num;
+                        }
+                    } else {
+                        document.getElementById('initial-load').style.display = 'block';
+                        document.getElementById('initial-load').textContent = data.status === 'Sin detecciones' ? 'Sin detecciones en el momento.' : 'Esperando detecciones...';
+                    }
+                    
+                    countsContainer.innerHTML = countsHtml;
+                    
+                    // 3. Actualizar el Total
+                    totalObjectsElement.textContent = total;
+
+                })
+                .catch(error => console.error('Error al obtener métricas:', error));
+        }
+
+        // Llamar a la función de actualización de métricas cada 500ms
+        setInterval(updateMetrics, 500); 
+    </script>
+</body>
+</html>
