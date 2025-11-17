@@ -12,7 +12,6 @@ cap = cv2.VideoCapture(source)
 latest_metrics = {"status": "Iniciando...", "counts": {}}
 lock = threading.Lock() 
 
-
 def generate_frames():
     """Generador que procesa los frames de video con YOLO y los codifica."""
     global latest_metrics
@@ -21,13 +20,12 @@ def generate_frames():
         return
 
     while True:
-        # 1. Capturar el frame
         ret, frame = cap.read()
         if not ret:
             print("Error: No se puede leer el frame.")
             break
 
-        results = model.track(source=frame, show=False, stream=True, persist=True)
+        results = model.predict(source=frame, show=False, stream=True) 
         
         for result in results:
             annotated_frame = result.plot()
@@ -70,5 +68,5 @@ def get_metrics():
         return jsonify(latest_metrics)
 
 if __name__ == '__main__':
-    print("Servidor Flask iniciado en http://127.0.0.1:5000")
-    app.run(host='0.0.0.0', port='5000', debug=False, threaded=True) 
+    print("Servidor iniciado en http://127.0.0.1:5000")
+    app.run(host='0.0.0.0', port='5000', debug=False, threaded=True)
