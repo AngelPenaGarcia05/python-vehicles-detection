@@ -1,0 +1,123 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - Sistema de Tráfico{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-12">
+        <h1><i class="fas fa-tachometer-alt me-2"></i>Dashboard de Monitoreo</h1>
+        <p class="lead">Sistema de monitoreo de tráfico en tiempo real con {{ num_cameras }} cámaras en vivo</p>
+        <div class="alert alert-info">
+            <i class="fas fa-info-circle me-2"></i>
+            <strong>Sistema activo:</strong> Procesando videos reales con detección de vehículos
+        </div>
+    </div>
+</div>
+
+<!-- Panel de Estado General -->
+<div class="row mb-4">
+    <div class="col-md-3">
+        <div class="card text-white bg-primary">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h4 id="totalVehicles">0</h4>
+                        <p class="mb-0">Vehículos Totales</p>
+                    </div>
+                    <div class="align-self-center">
+                        <i class="fas fa-car fa-2x"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-white bg-success">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h4 id="overallCongestion">Bajo</h4>
+                        <p class="mb-0">Congestión General</p>
+                    </div>
+                    <div class="align-self-center">
+                        <i class="fas fa-chart-line fa-2x"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Estado de Semáforos</h5>
+                <div class="row text-center">
+                    <div class="col-6">
+                        <h6>Norte-Sur</h6>
+                        <div class="traffic-light">
+                            <div class="light red" id="ns-red"></div>
+                            <div class="light yellow" id="ns-yellow"></div>
+                            <div class="light green" id="ns-green"></div>
+                        </div>
+                        <small class="text-muted" id="ns-count">0 vehículos</small>
+                    </div>
+                    <div class="col-6">
+                        <h6>Este-Oeste</h6>
+                        <div class="traffic-light">
+                            <div class="light red" id="ew-red"></div>
+                            <div class="light yellow" id="ew-yellow"></div>
+                            <div class="light green" id="ew-green"></div>
+                        </div>
+                        <small class="text-muted" id="ew-count">0 vehículos</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Cámaras -->
+<div class="row mb-4">
+    {% for i in range(4) %}
+    <div class="col-md-6 col-lg-3 mb-3">
+        <div class="card h-100">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <span>Cámara {{ i+1 }}</span>
+                <span class="badge bg-secondary" id="cam{{i}}-status">Cargando...</span>
+            </div>
+            <div class="card-body p-0 position-relative">
+                <img src="{{ url_for('traffic.video_feed', camera_id=i) }}" 
+                     class="card-img-top camera-stream" 
+                     alt="Cámara {{ i+1 }} en vivo"
+                     id="cam{{i}}-stream"
+                     onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjQwIiBoZWlnaHQ9IjQ4MCIgdmlld0JveD0iMCAwIDY0MCA0ODAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSI2NDAiIGhlaWdodD0iNDgwIiBmaWxsPSIjRjNGNEY2Ii8+Cjx0ZXh0IHg9IjMyMCIgeT0iMjQwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMTgiIGZpbGw9IiM2QzZDNkMiPkNhbcOhcmEg{{ i+1 }}IG5vIGRpc3BvbmlibGU8L3RleHQ+Cjwvc3ZnPgo='">
+                
+            </div>
+            <div class="card-footer">
+                <small class="text-muted" id="cam{{i}}-metrics">Cargando video...</small>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<!-- Métricas Detalladas -->
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="card-title mb-0">Métricas Detalladas por Cámara</h5>
+                <small class="text-muted" id="lastUpdate">Última actualización: --</small>
+            </div>
+            <div class="card-body">
+                <div class="row" id="detailedMetrics">
+                    <!-- Las métricas se cargarán aquí via JavaScript -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/script.js') }}"></script>
+{% endblock %}

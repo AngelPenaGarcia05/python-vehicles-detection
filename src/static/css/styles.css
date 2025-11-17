@@ -1,0 +1,138 @@
+body {
+    background-color: #f8f9fa;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.card {
+    border: none;
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+    transition: transform 0.2s;
+}
+
+.card:hover {
+    transform: translateY(-2px);
+}
+
+.camera-stream {
+    height: 200px;
+    object-fit: cover;
+    background-color: #000;
+}
+
+/* Semáforos */
+.traffic-light {
+    display: inline-block;
+    background-color: #333;
+    padding: 10px;
+    border-radius: 10px;
+    margin: 10px 0;
+}
+
+.light {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    margin: 5px auto;
+    opacity: 0.3;
+    transition: opacity 0.3s;
+}
+
+.light.active {
+    opacity: 1;
+    box-shadow: 0 0 10px currentColor;
+}
+
+.light.red { background-color: #dc3545; }
+.light.yellow { background-color: #ffc107; }
+.light.green { background-color: #198754; }
+
+/* Badges para niveles de congestión */
+.congestion-low { background-color: #198754; }
+.congestion-medium { background-color: #ffc107; }
+.congestion-high { background-color: #dc3545; }
+
+/* Tarjetas de métricas */
+.metric-card {
+    border-left: 4px solid #007bff;
+    padding: 15px;
+    margin-bottom: 15px;
+    background-color: white;
+    border-radius: 0 5px 5px 0;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.metric-card h6 {
+    margin-bottom: 5px;
+    color: #6c757d;
+    font-size: 0.9rem;
+}
+
+.metric-card .count {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #007bff;
+}
+
+/* Animaciones */
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+.alert-pulse {
+    animation: pulse 2s infinite;
+}
+
+/* Estados de las cámaras */
+.camera-status {
+    font-size: 0.8rem;
+}
+
+.camera-offline {
+    background-color: #6c757d !important;
+}
+
+.camera-online {
+    background-color: #198754 !important;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .camera-stream {
+        height: 150px;
+    }
+    
+    .traffic-light {
+        padding: 8px;
+    }
+    
+    .light {
+        width: 25px;
+        height: 25px;
+    }
+}
+
+/* Loading states */
+.loading {
+    opacity: 0.7;
+    pointer-events: none;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #a8a8a8;
+}
