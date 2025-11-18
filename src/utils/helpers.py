@@ -1,8 +1,15 @@
-def get_congestion_level(vehicle_count):
-    """Determina el nivel de congestión basado en el conteo"""
-    if vehicle_count <= 2:
-        return "Bajo", "success"
-    elif vehicle_count <= 5:
-        return "Moderado", "warning"
-    else:
-        return "Alto", "danger"
+def get_congestion_color(level):
+    colors = {
+        'low': 'success',
+        'medium': 'warning', 
+        'high': 'danger'
+    }
+    return colors.get(level, 'secondary')
+
+def get_congestion_text(level):
+    texts = {
+        'low': 'Baja',
+        'medium': 'Media',
+        'high': 'Alta'
+    }
+    return texts.get(level, 'Desconocida')

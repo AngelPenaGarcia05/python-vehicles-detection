@@ -1,138 +1,109 @@
+/* Estilos personalizados para el modo oscuro */
 body {
-    background-color: #f8f9fa;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #121212;
+    color: #e0e0e0;
 }
 
 .card {
-    border: none;
-    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
-    transition: transform 0.2s;
+    border: 1px solid #333;
 }
 
-.card:hover {
-    transform: translateY(-2px);
+.card-header {
+    border-bottom: 1px solid #333;
 }
 
-.camera-stream {
+.camera-preview {
     height: 200px;
     object-fit: cover;
-    background-color: #000;
+    transition: transform 0.3s ease;
 }
 
-/* Semáforos */
+.camera-preview:hover {
+    transform: scale(1.02);
+}
+
+/* Estilos para semáforos */
 .traffic-light {
     display: inline-block;
-    background-color: #333;
-    padding: 10px;
+    background: #2c2c2c;
+    padding: 20px;
     border-radius: 10px;
-    margin: 10px 0;
+    border: 2px solid #444;
 }
 
 .light {
-    width: 30px;
-    height: 30px;
+    width: 60px;
+    height: 60px;
     border-radius: 50%;
-    margin: 5px auto;
+    margin: 10px 0;
     opacity: 0.3;
-    transition: opacity 0.3s;
+    transition: opacity 0.3s ease, box-shadow 0.3s ease;
 }
 
 .light.active {
     opacity: 1;
-    box-shadow: 0 0 10px currentColor;
+    box-shadow: 0 0 20px currentColor;
 }
 
-.light.red { background-color: #dc3545; }
-.light.yellow { background-color: #ffc107; }
-.light.green { background-color: #198754; }
-
-/* Badges para niveles de congestión */
-.congestion-low { background-color: #198754; }
-.congestion-medium { background-color: #ffc107; }
-.congestion-high { background-color: #dc3545; }
-
-/* Tarjetas de métricas */
-.metric-card {
-    border-left: 4px solid #007bff;
-    padding: 15px;
-    margin-bottom: 15px;
-    background-color: white;
-    border-radius: 0 5px 5px 0;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+.light.red {
+    background: #dc3545;
 }
 
-.metric-card h6 {
-    margin-bottom: 5px;
-    color: #6c757d;
-    font-size: 0.9rem;
+.light.yellow {
+    background: #ffc107;
 }
 
-.metric-card .count {
-    font-size: 1.5rem;
-    font-weight: bold;
-    color: #007bff;
+.light.green {
+    background: #28a745;
+}
+
+/* Badges personalizados */
+.badge {
+    font-size: 0.8em;
+}
+
+/* Mejoras para las tarjetas de video */
+.card-img-top {
+    border-radius: 0;
 }
 
 /* Animaciones */
 @keyframes pulse {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.05); }
-    100% { transform: scale(1); }
+    0% { opacity: 1; }
+    50% { opacity: 0.7; }
+    100% { opacity: 1; }
 }
 
-.alert-pulse {
+.pulse {
     animation: pulse 2s infinite;
 }
 
-/* Estados de las cámaras */
-.camera-status {
-    font-size: 0.8rem;
-}
-
-.camera-offline {
-    background-color: #6c757d !important;
-}
-
-.camera-online {
-    background-color: #198754 !important;
-}
-
-/* Responsive */
+/* Responsive improvements */
 @media (max-width: 768px) {
-    .camera-stream {
+    .camera-preview {
         height: 150px;
     }
     
-    .traffic-light {
-        padding: 8px;
-    }
-    
     .light {
-        width: 25px;
-        height: 25px;
+        width: 40px;
+        height: 40px;
     }
 }
 
-/* Loading states */
-.loading {
-    opacity: 0.7;
-    pointer-events: none;
-}
-
-/* Custom scrollbar */
+/* Scrollbar personalizado */
 ::-webkit-scrollbar {
     width: 8px;
 }
 
 ::-webkit-scrollbar-track {
-    background: #f1f1f1;
+    background: #1e1e1e;
 }
 
 ::-webkit-scrollbar-thumb {
-    background: #c1c1c1;
+    background: #444;
     border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-    background: #a8a8a8;
+    background: #555;
 }

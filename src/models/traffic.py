@@ -1,32 +1,28 @@
-from .database import get_db_connection
+from src.models.database import db
+from datetime import datetime
 
-class TrafficLog:
-    @staticmethod
-    def create(camera_id, vehicle_count, congestion_level):
-        conn = get_db_connection()
-        cur = conn.cursor()
-        
-        cur.execute(
-            'INSERT INTO traffic_logs (camera_id, vehicle_count, congestion_level) VALUES (%s, %s, %s)',
-            (camera_id, vehicle_count, congestion_level)
-        )
-        
-        conn.commit()
-        cur.close()
-        conn.close()
+class TrafficData(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    camera_id = db.Column(db.Integer, nullable=False)
+    total_vehicles = db.Column(db.Integer, nullable=False)
+    cars = db.Column(db.Integer, default=0)
+    trucks = db.Column(db.Integer, default=0)
+    buses = db.Column(db.Integer, default=0)
+    ambulances = db.Column(db.Integer, default=0)
+    mototaxis = db.Column(db.Integer, default=0)
+    congestion_level = db.Column(db.String(20), nullable=False)  # 'low', 'medium', 'high'
+    timestamp = db.Column(db.DateTime, default=datetime.utcnow)
     
-    @staticmethod
-    def get_recent_logs(limit=100):
-        conn = get_db_connection()
-        cur = conn.cursor(cursor_factory=RealDictCursor)
-        
-        cur.execute(
-            'SELECT * FROM traffic_logs ORDER BY timestamp DESC LIMIT %s',
-            (limit,)
-        )
-        
-        logs = cur.fetchall()
-        cur.close()
-        conn.close()
-        
-        return logs
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'camera_id': self.camera_id,
+            'total_vehicles': self.total_vehicles,
+            'cars': self.cars,
+            'trucks': self.trucks,
+            'buses': self.buses,
+            'ambulances': self.ambulances,
+            'mototaxis': self.mototaxis,
+            'congestion_level': self.congestion_level,
+            'timestamp': self.timestamp.isoformat()
+        }

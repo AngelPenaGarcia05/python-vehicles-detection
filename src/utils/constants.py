@@ -1,9 +1,15 @@
-# Configuración de vehículos
-VEHICLE_CLASSES = ['car', 'truck', 'bus', 'motorcycle']
+# Umbrales para niveles de congestión
+CONGESTION_THRESHOLDS = {
+    'low': 5,
+    'medium': 15,
+    'high': 25
+}
 
-# Configuración de semáforos
-TRAFFIC_LIGHT_CYCLES = {
-    'min_green_time': 20,
-    'max_green_time': 60,
-    'yellow_time': 3
+# Colores para las clases de vehículos
+VEHICLE_COLORS = {
+    'carro': '#007bff',
+    'camion': '#dc3545', 
+    'bus': '#28a745',
+    'ambulancia': '#ffc107',
+    'mototaxi': '#6f42c1'
 }
