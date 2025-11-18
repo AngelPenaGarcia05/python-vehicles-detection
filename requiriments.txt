@@ -1,7 +1,10 @@
 Flask
+Flask-SQLAlchemy
+Flask-Login
+Werkzeug
+psycopg2-binary
 opencv-python
 ultralytics
-psycopg2-binary
 numpy
-Werkzeug
 python-dotenv
+gunicorn
