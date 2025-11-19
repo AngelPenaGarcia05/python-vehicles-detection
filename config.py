@@ -11,7 +11,7 @@ class Config:
     # Configuración de videos
     VIDEO_PATHS = [
         'videos/videoplayback.mp4',
-        'videos/videoplayback1.mp4', 
+        'videos/videoplayback.mp4', 
         'videos/videoplayback2.mp4',
         'videos/videoplayback3.mp4'
     ]

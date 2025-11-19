@@ -12,9 +12,11 @@
                     Congestión {{ 'Baja' if congestion_level == 'low' else 'Media' if congestion_level == 'medium' else 'Alta' }}
                 </span>
             </h1>
-            <a href="{{ url_for('traffic.dashboard') }}" class="btn btn-secondary">
-                <i class="fas fa-arrow-left"></i> Volver al Dashboard
-            </a>
+            <div>
+                <a href="{{ url_for('traffic.dashboard') }}" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left"></i> Volver al Dashboard
+                </a>
+            </div>
         </div>
     </div>
 </div>
@@ -35,66 +37,172 @@
             <div class="card-body p-0">
                 <img src="{{ url_for('traffic.video_feed', camera_id=camera_id) }}" 
                      class="img-fluid w-100" 
-                     alt="Cámara {{ camera_id + 1 }}">
+                     alt="Cámara {{ camera_id + 1 }}"
+                     id="cameraFeed">
             </div>
         </div>
     </div>
     
     <div class="col-lg-4">
+        <!-- Tarjeta de Estadísticas en Tiempo Real -->
         <div class="card bg-dark mb-4">
             <div class="card-header">
-                <h5 class="card-title mb-0"><i class="fas fa-chart-bar"></i> Estadísticas</h5>
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-chart-bar"></i> Estadísticas en Tiempo Real
+                    <span class="badge bg-info pulse" id="liveBadge">EN VIVO</span>
+                </h5>
             </div>
             <div class="card-body">
-                <div class="mb-3">
-                    <h6>Total de Vehículos</h6>
-                    <h3 class="text-primary">{{ detection_data.total }}</h3>
+                <div class="mb-3 text-center">
+                    <h6>Vehículos Detectados Actualmente</h6>
+                    <h2 class="text-primary" id="totalVehicles">{{ detection_data.total }}</h2>
                 </div>
                 
-                <div class="row">
-                    <div class="col-6 mb-2">
-                        <small class="text-muted">Carros</small>
-                        <div class="fw-bold">{{ detection_data.cars }}</div>
+                <div class="row text-center">
+                    <div class="col-6 mb-3">
+                        <div class="border rounded p-2">
+                            <small class="text-muted d-block">🚗 Carros</small>
+                            <span class="fw-bold fs-5 text-info" id="carroCount">{{ detection_data.carro }}</span>
+                        </div>
                     </div>
-                    <div class="col-6 mb-2">
-                        <small class="text-muted">Camiones</small>
-                        <div class="fw-bold">{{ detection_data.trucks }}</div>
+                    <div class="col-6 mb-3">
+                        <div class="border rounded p-2">
+                            <small class="text-muted d-block">🚛 Camiones</small>
+                            <span class="fw-bold fs-5 text-warning" id="camionCount">{{ detection_data.camion }}</span>
+                        </div>
                     </div>
-                    <div class="col-6 mb-2">
-                        <small class="text-muted">Buses</small>
-                        <div class="fw-bold">{{ detection_data.buses }}</div>
+                    <div class="col-6 mb-3">
+                        <div class="border rounded p-2">
+                            <small class="text-muted d-block">🚌 Buses</small>
+                            <span class="fw-bold fs-5 text-success" id="busCount">{{ detection_data.bus }}</span>
+                        </div>
                     </div>
-                    <div class="col-6 mb-2">
-                        <small class="text-muted">Ambulancias</small>
-                        <div class="fw-bold">{{ detection_data.ambulances }}</div>
+                    <div class="col-6 mb-3">
+                        <div class="border rounded p-2">
+                            <small class="text-muted d-block">🚑 Ambulancias</small>
+                            <span class="fw-bold fs-5 text-danger" id="ambulanciaCount">{{ detection_data.ambulancia }}</span>
+                        </div>
                     </div>
-                    <div class="col-6 mb-2">
-                        <small class="text-muted">Mototaxis</small>
-                        <div class="fw-bold">{{ detection_data.mototaxis }}</div>
+                    <div class="col-12 mb-3">
+                        <div class="border rounded p-2">
+                            <small class="text-muted d-block">🛵 Mototaxis</small>
+                            <span class="fw-bold fs-5 text-purple" id="mototaxiCount">{{ detection_data.mototaxi }}</span>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
         
+        <!-- Información del Estado -->
         <div class="card bg-dark">
             <div class="card-header">
-                <h5 class="card-title mb-0"><i class="fas fa-info-circle"></i> Información</h5>
+                <h5 class="card-title mb-0"><i class="fas fa-info-circle"></i> Información del Sistema</h5>
             </div>
             <div class="card-body">
-                <p class="small">
-                    <i class="fas fa-lightbulb text-warning"></i>
-                    Esta cámara muestra el tráfico en tiempo real con detección automática de vehículos.
-                </p>
-                <p class="small">
-                    <i class="fas fa-robot text-info"></i>
-                    La inteligencia artificial identifica: carros, camiones, buses, ambulancias y mototaxis.
-                </p>
-                <p class="small">
-                    <i class="fas fa-traffic-light text-success"></i>
-                    El nivel de congestión se calcula automáticamente basado en la cantidad de vehículos.
-                </p>
+                <div class="mb-3">
+                    <h6>Estado de Congestión</h6>
+                    <span class="badge bg-{{ 'success' if congestion_level == 'low' else 'warning' if congestion_level == 'medium' else 'danger' }} fs-6 w-100 py-2" id="congestionBadge">
+                        {{ 'BAJA' if congestion_level == 'low' else 'MEDIA' if congestion_level == 'medium' else 'ALTA' }}
+                    </span>
+                </div>
+                
+                <div class="mt-3">
+                    <p class="small mb-1">
+                        <i class="fas fa-lightbulb text-warning"></i>
+                        <strong>Procesamiento:</strong> 
+                        <span id="processingStatus">{{ 'ACTIVO' if processing else 'INACTIVO' }}</span>
+                    </p>
+                    <p class="small mb-1">
+                        <i class="fas fa-robot text-info"></i>
+                        Modelo YOLO: best.pt
+                    </p>
+                    <p class="small mb-1">
+                        <i class="fas fa-sync-alt text-success"></i>
+                        Datos actualizados en tiempo real
+                    </p>
+                    <p class="small mb-0">
+                        <i class="fas fa-car text-primary"></i>
+                        {{ detection_data.total }} vehículos detectados actualmente
+                    </p>
+                </div>
             </div>
         </div>
     </div>
 </div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+// Actualizar datos de la cámara cada 2 segundos
+function updateCameraData() {
+    fetch(`/api/camera_data/{{ camera_id }}`)
+        .then(response => response.json())
+        .then(data => {
+            // Actualizar los contadores en tiempo real
+            document.getElementById('totalVehicles').textContent = data.detection_data.total;
+            document.getElementById('carroCount').textContent = data.detection_data.carro;
+            document.getElementById('camionCount').textContent = data.detection_data.camion;
+            document.getElementById('busCount').textContent = data.detection_data.bus;
+            document.getElementById('ambulanciaCount').textContent = data.detection_data.ambulancia;
+            document.getElementById('mototaxiCount').textContent = data.detection_data.mototaxi;
+            
+            // Actualizar badge de congestión
+            const congestionLevel = data.congestion_level;
+            let bgClass = 'bg-secondary';
+            let text = 'Desconocida';
+            
+            if (congestionLevel === 'low') {
+                bgClass = 'bg-success';
+                text = 'BAJA';
+            } else if (congestionLevel === 'medium') {
+                bgClass = 'bg-warning';
+                text = 'MEDIA';
+            } else if (congestionLevel === 'high') {
+                bgClass = 'bg-danger';
+                text = 'ALTA';
+            }
+            
+            const congestionBadge = document.getElementById('congestionBadge');
+            congestionBadge.className = `badge ${bgClass} fs-6 w-100 py-2`;
+            congestionBadge.textContent = text;
+        })
+        .catch(error => {
+            console.error('Error actualizando datos:', error);
+        });
+}
+
+// Iniciar actualización automática
+setInterval(updateCameraData, 2000);
+
+// Forzar actualización inmediata
+updateCameraData();
+
+// Manejar errores en la carga de video
+document.getElementById('cameraFeed').addEventListener('error', function() {
+    console.log('Error cargando video, recargando...');
+    setTimeout(() => {
+        this.src = this.src.split('?')[0] + '?t=' + new Date().getTime();
+    }, 1000);
+});
+</script>
+
+<style>
+.text-purple {
+    color: #6f42c1 !important;
+}
+
+.pulse {
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% { opacity: 1; }
+    50% { opacity: 0.5; }
+    100% { opacity: 1; }
+}
+
+.border {
+    border-color: #444 !important;
+}
+</style>
 {% endblock %}
