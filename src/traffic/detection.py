@@ -212,9 +212,10 @@ class TrafficDetector:
                 )
     
     def change_semaphore(self, group_name, current_time):
-        """Cambiar el estado del semáforo de un grupo"""
         group = self.semaphore_states[group_name]
         other_group = 'group_2' if group_name == 'group_1' else 'group_1'
+        
+        print(f"🔴 Cambiando semáforo {group_name} de {group['current_color']}")
         
         if group['current_color'] == 'green':
             # Cambiar a amarillo primero
@@ -222,7 +223,7 @@ class TrafficDetector:
             group['change_time'] = current_time + timedelta(
                 seconds=self.semaphore_times['yellow_time']
             )
-            print(f"🟡 Semáforo {group_name} cambiando a AMARILLO")
+            print(f"🟡 Semáforo {group_name} cambiando a AMARILLO por {self.semaphore_times['yellow_time']}s")
         
         elif group['current_color'] == 'yellow':
             # Cambiar a rojo
@@ -230,7 +231,7 @@ class TrafficDetector:
             
             # Calcular tiempo de verde para el otro grupo basado en congestión
             green_time = self.calculate_green_time(other_group)
-            group['change_time'] = current_time + timedelta(seconds=green_time)
+            group['change_time'] = current_time + timedelta(seconds=green_time + self.semaphore_times['yellow_time'])
             
             # El otro grupo cambia a verde
             self.semaphore_states[other_group]['current_color'] = 'green'

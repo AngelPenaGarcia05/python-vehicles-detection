@@ -1,0 +1,124 @@
+/* Estilos para semáforos reales HORIZONTALES */
+.semaphore-real {
+    display: inline-flex;
+    background: #2c2c2c;
+    padding: 15px;
+    border-radius: 15px;
+    border: 3px solid #444;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    width: 240px;
+    height: 100px;
+    position: relative;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.semaphore-light {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    border: 2px solid transparent;
+    position: relative;
+    transition: all 0.3s ease;
+    flex-shrink: 0;
+}
+
+.semaphore-light::after {
+    content: '';
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    right: 3px;
+    bottom: 3px;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.3);
+    transition: all 0.3s ease;
+}
+
+.semaphore-light.active {
+    box-shadow: 0 0 15px currentColor;
+    border-color: rgba(255, 255, 255, 0.4);
+}
+
+.semaphore-light.active::after {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.semaphore-light.red {
+    background: linear-gradient(145deg, #dc3545, #c82333);
+    opacity: 0.3;
+}
+
+.semaphore-light.red.active {
+    opacity: 1;
+}
+
+.semaphore-light.yellow {
+    background: linear-gradient(145deg, #ffc107, #e0a800);
+    opacity: 0.3;
+}
+
+.semaphore-light.yellow.active {
+    opacity: 1;
+}
+
+.semaphore-light.green {
+    background: linear-gradient(145deg, #28a745, #218838);
+    opacity: 0.3;
+}
+
+.semaphore-light.green.active {
+    opacity: 1;
+}
+
+/* Animación de parpadeo para amarillo */
+.semaphore-light.yellow.blink {
+    animation: blink 1s infinite;
+}
+
+@keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+}
+
+.semaphore-status {
+    margin-top: 10px;
+    padding: 8px;
+    border-radius: 5px;
+    background: #333;
+    font-weight: bold;
+    text-align: center;
+    font-size: 0.9em;
+}
+
+.semaphore-group {
+    margin-bottom: 20px;
+}
+
+.semaphore-group h6 {
+    border-bottom: 2px solid #444;
+    padding-bottom: 5px;
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+.semaphore-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Para pantallas pequeñas */
+@media (max-width: 768px) {
+    .semaphore-real {
+        width: 200px;
+        height: 80px;
+        padding: 12px;
+    }
+    
+    .semaphore-light {
+        width: 50px;
+        height: 50px;
+    }
+}
